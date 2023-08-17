@@ -24,6 +24,10 @@ export function activate(context: vscode.ExtensionContext) {
   )
 
   context.subscriptions.push(disposable)
+
+  disposable = vscode.commands.registerCommand('collaborator.time', () => {
+    vscode.window.showWarningMessage(new Date().toDateString())
+  })
 }
 
 // This method is called when your extension is deactivated

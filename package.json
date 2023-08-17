@@ -15,7 +15,11 @@
     "commands": [
       {
         "command": "collaborator.helloWorld",
-        "title": "Hello World"
+        "title": "Collaborator | Hello World"
+      },
+      {
+        "command": "collaborator.time",
+        "title": "Collaborator | Time"
       }
     ]
   },
