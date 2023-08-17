@@ -21,6 +21,23 @@
         "command": "collaborator.time",
         "title": "Collaborator | Time"
       }
+    ],
+    "configuration": [
+      {
+        "title": "Collaborator",
+        "properties": {
+          "collaborator.gitlab-access-token": {
+            "type": "string",
+            "default": "<tokenvalue>",
+            "description": "Personal Access token for your GitLab user"
+          },
+          "collaborator.gitlab-domain": {
+            "type": "string",
+            "default": "gitlab.com",
+            "description": "GitLab Domain, ex: gitlab.com"
+          }
+        }
+      }
     ]
   },
   "scripts": {

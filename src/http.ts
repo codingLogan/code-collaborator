@@ -1,12 +1,11 @@
-import * as https from 'node:https'
-import * as nodehttp from 'node:http'
+import * as nodehttps from 'node:https'
 
 export default class Http {
   static get(url: string) {
     const urlOptions = new URL(url)
 
     return new Promise((resolve, reject) => {
-      const req = nodehttp
+      const req = nodehttps
         .request(
           {
             hostname: urlOptions.hostname,
