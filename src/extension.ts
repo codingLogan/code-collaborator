@@ -10,16 +10,34 @@ export function activate(context: vscode.ExtensionContext) {
   // This line of code will only be executed once when your extension is activated
   console.log('Congratulations, your extension "collaborator" is now active!')
 
+  const accessToken = String(
+    vscode.workspace.getConfiguration().get('collaborator.gitlab-access-token')
+  )
+
   const gitlabDomain = String(
     vscode.workspace.getConfiguration().get('collaborator.gitlab-domain')
   )
 
-  http.get(`https://${gitlabDomain}/api/v4/user`).then(
-    (happy) => {
-      console.log({ happy })
+  http.get(`https://${gitlabDomain}/api/v4/user`, accessToken).then(
+    (user) => {
+      console.log({ user })
+
+      http
+        .get(
+          `https://${gitlabDomain}/api/v4/users/${user.id}/following`,
+          accessToken
+        )
+        .then(
+          (happyUsers) => {
+            console.log(JSON.stringify(happyUsers, null, 2))
+          },
+          (sadUsersMessage) => {
+            console.log({ sadUsersMessage })
+          }
+        )
     },
-    (sad) => {
-      console.log({ sad })
+    (sadQuery) => {
+      console.log({ sadQuery })
     }
   )
 
