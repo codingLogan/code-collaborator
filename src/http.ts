@@ -2,31 +2,26 @@ import * as https from 'node:https'
 import * as nodehttp from 'node:http'
 
 export default class Http {
-  static get() {
+  static get(url: string) {
+    const urlOptions = new URL(url)
+
     return new Promise((resolve, reject) => {
       const req = nodehttp
         .request(
           {
-            hostname: 'worldtimeapi.org',
-            path: '/api/timezone/America/Denver',
+            hostname: urlOptions.hostname,
+            path: urlOptions.pathname,
             method: 'GET',
           },
           (res) => {
-            console.log('statusCode:', res.statusCode)
-            console.log('headers:', res.headers)
-
-            const data: any[] = []
             let dataString = ''
 
             res.on('data', (d) => {
-              process.stdout.write(d)
-              data.push(d)
               dataString += d
             })
 
             res.on('end', () => {
-              console.log('No more data in response.')
-              console.log('Data: ', data)
+              console.log('End of data reached.')
               console.log('Data String: ', dataString)
               resolve(dataString)
             })
