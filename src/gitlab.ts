@@ -24,6 +24,18 @@ export class GitLabSource {
       this.accessToken
     )
 
-    return users
+    return users.sort(this.nameSort)
+  }
+
+  nameSort(a: { name: string }, b: { name: string }) {
+    if (a.name > b.name) {
+      return 1
+    }
+
+    if (a.name < b.name) {
+      return -1
+    }
+
+    return 0
   }
 }
