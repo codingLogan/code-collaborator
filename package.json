@@ -38,7 +38,15 @@
           }
         }
       }
-    ]
+    ],
+    "views": {
+      "explorer": [
+        {
+          "id": "collaborator",
+          "name": "Collaborator"
+        }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
