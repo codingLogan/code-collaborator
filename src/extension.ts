@@ -29,6 +29,14 @@ export function activate(context: vscode.ExtensionContext) {
   vscode.commands.registerCommand('collaborator.refresh', () =>
     collaboratorProvider.refresh()
   )
+
+  vscode.commands.registerCommand(
+    'collaborator.open-link',
+    (clickedItem: { url: string }) => {
+      console.log('callback with args: ', clickedItem)
+      vscode.env.openExternal(vscode.Uri.parse(clickedItem.url))
+    }
+  )
 }
 
 // This method is called when your extension is deactivated

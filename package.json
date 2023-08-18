@@ -14,12 +14,8 @@
   "contributes": {
     "commands": [
       {
-        "command": "collaborator.helloWorld",
-        "title": "Collaborator | Hello World"
-      },
-      {
-        "command": "collaborator.time",
-        "title": "Collaborator | Time"
+        "command": "collaborator.open-link",
+        "title": "GitLab ->"
       },
       {
         "command": "collaborator.refresh",
@@ -53,6 +49,13 @@
           "command": "collaborator.refresh",
           "when": "view == collaborator",
           "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "collaborator.open-link",
+          "when": "view == collaborator",
+          "group": "inline"
         }
       ]
     },

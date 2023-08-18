@@ -15,7 +15,9 @@ export class GitLabSource {
     )
   }
 
-  async getFollowedUsers(): Promise<{ id: string; name: string }[]> {
+  async getFollowedUsers(): Promise<
+    { id: string; name: string; web_url: string }[]
+  > {
     const user = await this.getUser()
     const users = await http.get(
       `https://${this.gitlabDomain}/api/v4/users/${user.id}/following`,

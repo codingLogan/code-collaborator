@@ -4,6 +4,7 @@ import { GitLabSource } from './gitlab'
 class CollaboratorItem extends vscode.TreeItem {
   constructor(
     public readonly label: string,
+    public readonly url: string,
     public readonly collapsibleState: vscode.TreeItemCollapsibleState
   ) {
     super(label, collapsibleState)
@@ -29,6 +30,7 @@ export class CollaboratorDataProvider
           (followedUser) =>
             new CollaboratorItem(
               followedUser.name,
+              followedUser.web_url,
               vscode.TreeItemCollapsibleState.None
             )
         ),
@@ -36,6 +38,7 @@ export class CollaboratorDataProvider
         return [
           new CollaboratorItem(
             'No collaborators were found',
+            '',
             vscode.TreeItemCollapsibleState.None
           ),
         ]
