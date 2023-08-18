@@ -4,7 +4,7 @@ export default class Http {
   static get(url: string, token: string) {
     const urlOptions = new URL(url)
 
-    return new Promise<{ id: string }>((resolve, reject) => {
+    return new Promise<any>((resolve, reject) => {
       const req = nodehttps
         .request(
           {

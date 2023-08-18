@@ -20,6 +20,14 @@
       {
         "command": "collaborator.time",
         "title": "Collaborator | Time"
+      },
+      {
+        "command": "collaborator.refresh",
+        "title": "Collaborator | Refresh",
+        "icon": {
+          "light": "src/resources/light/refresh.svg",
+          "dark": "src/resources/dark/refresh.svg"
+        }
       }
     ],
     "configuration": [
@@ -39,8 +47,17 @@
         }
       }
     ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "collaborator.refresh",
+          "when": "view == collaborator",
+          "group": "navigation"
+        }
+      ]
+    },
     "views": {
-      "explorer": [
+      "scm": [
         {
           "id": "collaborator",
           "name": "Collaborator"
