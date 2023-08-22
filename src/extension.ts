@@ -9,7 +9,6 @@ import { GitLabSource } from './gitlab'
 export function activate(context: vscode.ExtensionContext) {
   // Use the console to output diagnostic information (console.log) and errors (console.error)
   // This line of code will only be executed once when your extension is activated
-  console.log('Congratulations, your extension "collaborator" is now active!')
 
   const accessToken = String(
     vscode.workspace.getConfiguration().get('collaborator.gitlab-access-token')
@@ -33,7 +32,6 @@ export function activate(context: vscode.ExtensionContext) {
   vscode.commands.registerCommand(
     'collaborator.open-link',
     (clickedItem: { url: string }) => {
-      console.log('callback with args: ', clickedItem)
       vscode.env.openExternal(vscode.Uri.parse(clickedItem.url))
     }
   )

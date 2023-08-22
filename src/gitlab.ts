@@ -9,7 +9,7 @@ export class GitLabSource {
   }
 
   async getUser(): Promise<{ id: string }> {
-    return await http.get(
+    return http.get(
       `https://${this.gitlabDomain}/api/v4/user`,
       this.accessToken
     )
@@ -18,8 +18,8 @@ export class GitLabSource {
   async getUsersOpenMRs(
     authorID: string | number
   ): Promise<{ title: string; web_url: string }[]> {
-    return await http.get(
-      `https://${this.gitlabDomain}/api/v4/merge_requests?state=opened&author_id=${authorID}`,
+    return http.get(
+      `https://${this.gitlabDomain}/api/v4/merge_requests?author_id=${authorID}&state=opened&scope=all`,
       this.accessToken
     )
   }
@@ -28,13 +28,13 @@ export class GitLabSource {
     userID: string | number
   ): Promise<{ id: string; name: string; web_url: string }[]> {
     // Mock data
-    const users = [{ id: '1', name: 'Name', web_url: 'http://github.com' }]
+    // const users = [{ id: '1', name: 'Name', web_url: 'http://github.com' }]
 
     // Real Data
-    // const users = await http.get(
-    //   `https://${this.gitlabDomain}/api/v4/users/${userID}/following`,
-    //   this.accessToken
-    // )
+    const users = await http.get(
+      `https://${this.gitlabDomain}/api/v4/users/${userID}/following`,
+      this.accessToken
+    )
 
     return users.sort(this.nameSort)
   }
@@ -48,45 +48,45 @@ export class GitLabSource {
     }[]
   > {
     // Real Data
-    // const user = await this.getUser()
-    // const followedUsers = await this.getFollowedUsers(user.id)
+    const user = await this.getUser()
+    const followedUsers = await this.getFollowedUsers(user.id)
 
-    // const fullData: {
-    //   id: string
-    //   name: string
-    //   web_url: string
-    //   children: { title: string; web_url: string }[]
-    // }[] = followedUsers.map((user) => ({
-    //   ...user,
-    //   children: [],
-    // }))
+    const fullData: {
+      id: string
+      name: string
+      web_url: string
+      children: { title: string; web_url: string }[]
+    }[] = followedUsers.map((user) => ({
+      ...user,
+      children: [],
+    }))
 
-    // let i = 0
-    // for (i = 0; i < followedUsers.length; i++) {
-    //   const userMrs = await this.getUsersOpenMRs(followedUsers[i].id)
-    //   fullData[i].children = userMrs
-    // }
+    let i = 0
+    for (i = 0; i < followedUsers.length; i++) {
+      const userMRs = await this.getUsersOpenMRs(followedUsers[i].id)
+      fullData[i].children = [...userMRs]
+    }
 
-    // return fullData
+    return fullData
 
     // Mock Data
-    return Promise.resolve([
-      {
-        id: '1',
-        name: 'Name1',
-        web_url: 'http://github.com/name1',
-        children: [{ title: 'MR1', web_url: 'http://github.com/mr1' }],
-      },
-      {
-        id: '1',
-        name: 'Name2',
-        web_url: 'http://github.com/name2',
-        children: [
-          { title: 'MR2', web_url: 'http://github.com/mr2' },
-          { title: 'MR3', web_url: 'http://github.com/mr3' },
-        ],
-      },
-    ])
+    // return Promise.resolve([
+    //   {
+    //     id: '1',
+    //     name: 'Name1',
+    //     web_url: 'http://github.com/name1',
+    //     children: [{ title: 'MR1', web_url: 'http://github.com/mr1' }],
+    //   },
+    //   {
+    //     id: '1',
+    //     name: 'Name2',
+    //     web_url: 'http://github.com/name2',
+    //     children: [
+    //       { title: 'MR2', web_url: 'http://github.com/mr2' },
+    //       { title: 'MR3', web_url: 'http://github.com/mr3' },
+    //     ],
+    //   },
+    // ])
   }
 
   nameSort(a: { name: string }, b: { name: string }) {

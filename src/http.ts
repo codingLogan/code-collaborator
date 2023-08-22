@@ -9,7 +9,7 @@ export default class Http {
         .request(
           {
             hostname: urlOptions.hostname,
-            path: urlOptions.pathname,
+            path: urlOptions.pathname + urlOptions.search,
             method: 'GET',
             headers: {
               // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -24,9 +24,6 @@ export default class Http {
             })
 
             res.on('end', () => {
-              console.log('End of data reached.')
-              console.log('Data String: ', dataString)
-
               try {
                 const jsonData = JSON.parse(dataString)
                 resolve(jsonData)
