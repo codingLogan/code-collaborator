@@ -1,11 +1,24 @@
 import * as vscode from 'vscode'
 import { GitLabSource } from './gitlab'
 
+/*
+
+Collaborators
+  User1 
+    MR1
+    MR2
+  User2
+    MR1
+    MR2
+
+*/
+
 class CollaboratorItem extends vscode.TreeItem {
   constructor(
     public readonly label: string,
     public readonly url: string,
-    public readonly collapsibleState: vscode.TreeItemCollapsibleState
+    public readonly collapsibleState: vscode.TreeItemCollapsibleState,
+    public readonly children?: CollaboratorItem[] | undefined
   ) {
     super(label, collapsibleState)
   }
@@ -23,27 +36,43 @@ export class CollaboratorDataProvider
     return element
   }
 
-  getChildren(element?: CollaboratorItem): Thenable<CollaboratorItem[]> {
-    return this.dataSource.getFollowedUsers().then(
-      (resolved) =>
-        resolved.map(
-          (followedUser) =>
+  getChildren(
+    element?: CollaboratorItem
+  ): Thenable<CollaboratorItem[]> | vscode.ProviderResult<CollaboratorItem[]> {
+    // If there is no parent element to reference
+    if (!element) {
+      return this.dataSource.getData().then(
+        (resolved) => {
+          return resolved.map(
+            (followedUser) =>
+              new CollaboratorItem(
+                followedUser.name,
+                followedUser.web_url,
+                vscode.TreeItemCollapsibleState.Collapsed,
+                followedUser.children.map(
+                  (mr) =>
+                    new CollaboratorItem(
+                      mr.title,
+                      mr.web_url,
+                      vscode.TreeItemCollapsibleState.None
+                    )
+                )
+              )
+          )
+        },
+        (rejected) => {
+          return [
             new CollaboratorItem(
-              followedUser.name,
-              followedUser.web_url,
+              'No collaborators were found',
+              '',
               vscode.TreeItemCollapsibleState.None
-            )
-        ),
-      (rejected) => {
-        return [
-          new CollaboratorItem(
-            'No collaborators were found',
-            '',
-            vscode.TreeItemCollapsibleState.None
-          ),
-        ]
-      }
-    )
+            ),
+          ]
+        }
+      )
+    } else {
+      return Promise.resolve(element?.children)
+    }
   }
 
   private _onDidChangeTreeData: vscode.EventEmitter<
