@@ -27,8 +27,8 @@ class CollaboratorItem extends vscode.TreeItem {
 export class CollaboratorDataProvider
   implements vscode.TreeDataProvider<CollaboratorItem>
 {
-  dataSource: GitLabSource
-  constructor(dataSource: GitLabSource) {
+  dataSource: RemoteSource
+  constructor(dataSource: RemoteSource) {
     this.dataSource = dataSource
   }
 
