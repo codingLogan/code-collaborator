@@ -36,12 +36,7 @@ export class GitLabSource implements RemoteSource {
     const user = await this.getUser()
     const followedUsers = await this.getFollowedUsers(user.id)
 
-    const fullData: {
-      id: string
-      name: string
-      web_url: string
-      children: { title: string; web_url: string }[]
-    }[] = followedUsers.map((user) => ({
+    const fullData: UserWithPullRequests[] = followedUsers.map((user) => ({
       ...user,
       children: [],
     }))
