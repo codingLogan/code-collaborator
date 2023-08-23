@@ -15,7 +15,11 @@
     "commands": [
       {
         "command": "collaborator.open-link",
-        "title": "GitLab ->"
+        "title": "View Profile ->"
+      },
+      {
+        "command": "collaborator.open-pr-link",
+        "title": "Review Code ->"
       },
       {
         "command": "collaborator.refresh",
@@ -54,7 +58,12 @@
       "view/item/context": [
         {
           "command": "collaborator.open-link",
-          "when": "view == collaborator",
+          "when": "view == collaborator && viewItem == user",
+          "group": "inline"
+        },
+        {
+          "command": "collaborator.open-pr-link",
+          "when": "view == collaborator && viewItem == pull-request",
           "group": "inline"
         }
       ]

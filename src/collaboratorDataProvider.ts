@@ -18,6 +18,7 @@ class CollaboratorItem extends vscode.TreeItem {
     public readonly label: string,
     public readonly url: string,
     public readonly collapsibleState: vscode.TreeItemCollapsibleState,
+    public readonly contextValue: string,
     public readonly children?: CollaboratorItem[] | undefined
   ) {
     super(label, collapsibleState)
@@ -49,12 +50,14 @@ export class CollaboratorDataProvider
                 followedUser.name,
                 followedUser.web_url,
                 vscode.TreeItemCollapsibleState.Collapsed,
+                'user',
                 followedUser.children.map(
                   (mr) =>
                     new CollaboratorItem(
                       mr.title,
                       mr.web_url,
-                      vscode.TreeItemCollapsibleState.None
+                      vscode.TreeItemCollapsibleState.None,
+                      'pull-request'
                     )
                 )
               )
@@ -65,7 +68,8 @@ export class CollaboratorDataProvider
             new CollaboratorItem(
               'No collaborators were found',
               '',
-              vscode.TreeItemCollapsibleState.None
+              vscode.TreeItemCollapsibleState.None,
+              'error'
             ),
           ]
         }

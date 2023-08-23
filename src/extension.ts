@@ -37,6 +37,13 @@ export function activate(context: vscode.ExtensionContext) {
       vscode.env.openExternal(vscode.Uri.parse(clickedItem.url))
     }
   )
+
+  vscode.commands.registerCommand(
+    'collaborator.open-pr-link',
+    (clickedItem: { url: string }) => {
+      vscode.env.openExternal(vscode.Uri.parse(clickedItem.url))
+    }
+  )
 }
 
 // This method is called when your extension is deactivated
