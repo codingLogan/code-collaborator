@@ -1,6 +1,6 @@
 import http from './http'
 
-export class GitLabSource {
+export class GitLabSource implements RemoteSource {
   accessToken: string
   gitlabDomain: string
   constructor(accessToken: string, gitlabDomain: string) {
@@ -8,25 +8,21 @@ export class GitLabSource {
     this.gitlabDomain = gitlabDomain
   }
 
-  async getUser(): Promise<{ id: string; name: string; web_url: string }> {
+  async getUser(): Promise<User> {
     return http.get(
       `https://${this.gitlabDomain}/api/v4/user`,
       this.accessToken
     )
   }
 
-  async getUsersOpenMRs(
-    authorID: string | number
-  ): Promise<{ title: string; web_url: string }[]> {
+  async getUsersOpenMRs(authorID: string | number): Promise<PullRequest[]> {
     return http.get(
       `https://${this.gitlabDomain}/api/v4/merge_requests?author_id=${authorID}&state=opened&scope=all`,
       this.accessToken
     )
   }
 
-  async getFollowedUsers(
-    userID: string | number
-  ): Promise<{ id: string; name: string; web_url: string }[]> {
+  async getFollowedUsers(userID: string | number): Promise<User[]> {
     // Real Data
     const users = await http.get(
       `https://${this.gitlabDomain}/api/v4/users/${userID}/following`,
@@ -36,14 +32,7 @@ export class GitLabSource {
     return users.sort(this.nameSort)
   }
 
-  async getData(): Promise<
-    {
-      id: string
-      name: string
-      web_url: string
-      children: { title: string; web_url: string }[]
-    }[]
-  > {
+  async getData(): Promise<UserWithPullRequests[]> {
     const user = await this.getUser()
     const followedUsers = await this.getFollowedUsers(user.id)
 
