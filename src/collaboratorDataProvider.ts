@@ -1,5 +1,6 @@
 import * as vscode from 'vscode'
 import { GitLabSource } from './gitlab'
+import path = require('node:path')
 
 /*
 
@@ -22,6 +23,22 @@ class CollaboratorItem extends vscode.TreeItem {
     public readonly children?: CollaboratorItem[] | undefined
   ) {
     super(label, collapsibleState)
+  }
+}
+
+class PullRequestItem extends CollaboratorItem {
+  constructor(public readonly label: string, public readonly url: string) {
+    super(
+      label,
+      url,
+      vscode.TreeItemCollapsibleState.None,
+      'pull-request',
+      undefined
+    )
+    this.iconPath = {
+      light: path.join(__filename, '..', '..', 'src/resources/light/mr.svg'),
+      dark: path.join(__filename, '..', '..', 'src/resources/dark/mr.svg'),
+    }
   }
 }
 
@@ -52,13 +69,7 @@ export class CollaboratorDataProvider
                 vscode.TreeItemCollapsibleState.Collapsed,
                 'user',
                 followedUser.children.map(
-                  (mr) =>
-                    new CollaboratorItem(
-                      mr.title,
-                      mr.web_url,
-                      vscode.TreeItemCollapsibleState.None,
-                      'pull-request'
-                    )
+                  (mr) => new PullRequestItem(mr.title, mr.web_url)
                 )
               )
           )
